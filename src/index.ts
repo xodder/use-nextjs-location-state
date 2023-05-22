@@ -7,7 +7,7 @@ import useRouterQuery from './utils/use-router-query';
 export function useLocationState<T = unknown>(key: string, defaultValue?: T) {
   const updateLocationState = useUpdateLocationState();
 
-  const value: T = useLocationStateValue(key, defaultValue);
+  const value = useLocationStateValue(key, defaultValue);
   const setValue = (value: T) => {
     void updateLocationState({ [key]: value }, true);
   };
@@ -15,14 +15,17 @@ export function useLocationState<T = unknown>(key: string, defaultValue?: T) {
   return [value, setValue] as const;
 }
 
-export function useLocationStateValue(key: string, defaultValue?: unknown) {
+export function useLocationStateValue<T = unknown>(
+  key: string,
+  defaultValue?: T
+) {
   const query = useRouterQuery();
 
   if (!query) {
     return defaultValue;
   }
 
-  const value = get(query, key, defaultValue);
+  const value = get(query, key, defaultValue) as T;
 
   if (!value) {
     return undefined;
@@ -30,7 +33,7 @@ export function useLocationStateValue(key: string, defaultValue?: unknown) {
 
   try {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return JSON.parse(value as string);
+    return JSON.parse(value as string) as T;
   } catch (e) {
     return value;
   }
