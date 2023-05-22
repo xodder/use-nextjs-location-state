@@ -1,5 +1,5 @@
 {
-  "name": "use-nextjs-location-state",
+  "name": "@xod/use-nextjs-location-state",
   "version": "1.0.0",
   "description": "A url state hook for use with Next.js",
   "main": "dist/index.js",
